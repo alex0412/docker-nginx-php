@@ -8,10 +8,10 @@ ADD nginx.conf /etc/nginx/
 # Install PHP
 RUN \
   apt-get update && apt-get -y install apt-utils && \
-  echo "deb http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
-  echo "deb-src http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
-  apt-get -y install wget && wget http://www.dotdeb.org/dotdeb.gpg && apt-key add dotdeb.gpg && \
-  apt-get -y install php5-cli php5-fpm php5-pgsql php5-gd php5-curl curl && \
+  #echo "deb http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
+  #echo "deb-src http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
+  apt-get -y install wget && \
+  apt-get -y install php5-cli php5-fpm php5-pgsql php5-gd php5-curl php5-mysqlnd curl mysql-client && \
 
   echo "listen.mode = 0666" >> /etc/php5/fpm/pool.d/www.conf && echo "clear_env = no" >> /etc/php5/fpm/pool.d/www.conf && \
   echo "date.timezone = Europe/Berlin" >> /etc/php5/cli/php.ini && echo "date.timezone = Europe/Berlin" >> /etc/php5/fpm/php.ini && \
