@@ -16,6 +16,16 @@ RUN \
   echo "listen.mode = 0666" >> /etc/php5/fpm/pool.d/www.conf && echo "clear_env = no" >> /etc/php5/fpm/pool.d/www.conf && \
   echo "date.timezone = Europe/Berlin" >> /etc/php5/cli/php.ini && echo "date.timezone = Europe/Berlin" >> /etc/php5/fpm/php.ini && \
 
+# Install Supervisor to start processes
+  apt-get install -y supervisor && \
+  mkdir -p /var/log/supervisor && \
+
+# Get Composer
+  curl -sS https://getcomposer.org/installer | php && \
+  mv composer.phar /usr/local/bin/composer && \
+  composer global require drush/drush:dev-master && \
+  echo 'export PATH="$HOME/.composer/vendor/bin:$PATH"' >> ~/.bashrc && \
+
 # Install Ruby and Node
   apt-get update && apt-get install -y python python-dev python-pip python-virtualenv && \
   rm -rf /var/lib/apt/lists/* && \
@@ -31,15 +41,11 @@ RUN \
   cd /tmp && \
   rm -rf /tmp/node-v* && \
   npm install -g npm && \
-  echo '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc && \
-
-# Install Supervisor to start processes
-  apt-get install -y supervisor && \
-  mkdir -p /var/log/supervisor
+  echo '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-WORKDIR /app
-ONBUILD ADD . /app
+#WORKDIR /app
+#ONBUILD ADD . /app
 
 CMD ["/usr/bin/supervisord"]
