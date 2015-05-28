@@ -8,11 +8,10 @@ ADD nginx.conf /etc/nginx/
 # Various
 RUN \
   apt-get update && apt-get -y install apt-utils && \
-  #echo "deb http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
-  #echo "deb-src http://packages.dotdeb.org wheezy-php56 all" >> /etc/apt/sources.list && \
   apt-get -y install wget && \
-  apt-get -y install imagemagick imagemagick-doc && \
+  apt-get -y install imagemagick && \
   wget http://pear.php.net/go-pear.phar && \
+  apt-get -y install vim && \
 
 # Install PHP, MySQL Client, Curl
   apt-get -y install php5-cli php5-fpm php5-pgsql php5-gd php5-imagick php5-curl php5-mysqlnd php5-xdebug php5-dev curl mysql-client && \
@@ -24,6 +23,7 @@ RUN \
 # PHP Settings
   echo "listen.mode = 0666" >> /etc/php5/fpm/pool.d/www.conf && echo "clear_env = no" >> /etc/php5/fpm/pool.d/www.conf && \
   echo "date.timezone = Europe/Berlin" >> /etc/php5/cli/php.ini && echo "date.timezone = Europe/Berlin" >> /etc/php5/fpm/php.ini && \
+  echo "clear_env = no" >> /etc/php5/fpm/pool.d/www.conf && \
   sed -i 's/memory_limit = .*/memory_limit = 512M/' /etc/php5/fpm/php.ini && \
   #echo "extension=xhprof.so" >> /etc/php5/fpm/php.ini && \
 
@@ -54,8 +54,8 @@ RUN \
   npm install -g npm && \
   echo '\n# Node.js\nexport PATH="node_modules/.bin:$PATH"' >> /root/.bashrc
 
-#RUN rm /etc/php5/mods-available/xdebug.ini
-#ADD xdebug.ini /etc/php5/mods-available/
+RUN rm /etc/php5/mods-available/xdebug.ini
+ADD xdebug.ini /etc/php5/mods-available/
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
