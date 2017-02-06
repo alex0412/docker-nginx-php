@@ -5,7 +5,6 @@ MAINTAINER Alexander Li <a.li@playboy.de>
 RUN rm /etc/nginx/nginx.conf
 ADD nginx.conf /etc/nginx/
 
-# Various
 RUN \
   apt-get update && apt-get -y install apt-utils && \
   apt-get -y install wget && \
@@ -31,7 +30,7 @@ RUN \
   apt-get install -y supervisor && \
   mkdir -p /var/log/supervisor && \
 
-# Get Composer
+# Install Composer and Drush
   curl -sS https://getcomposer.org/installer | php && \
   mv composer.phar /usr/local/bin/composer && \
   composer global require drush/drush:dev-master && \
